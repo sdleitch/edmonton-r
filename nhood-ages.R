@@ -20,7 +20,7 @@ map_data <- left_join(
 )
 
 # total # of people in census who gave age
-map_data$counted_people <- rowSums(map_data[c(10:27)])
+map_data$counted_people <- rowSums(map_data[c(10:27)], na.rm = TRUE)
 
 # Find the appx avg age of the nhood
 # This is a very rough guess!
@@ -50,7 +50,24 @@ p <- ggplot() +
     x = long,
     y = lat,
     group = group),
-    color = "white", size = 0.1)
+    color = "white", size = 0.1) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Edmonton neighbourhood demographics", 
+    subtitle = "Average age in neighbourhoods, 2016 (approx.)"
+  ) +
+  #coord_equal() +
+  scale_fill_viridis(
+    option = "magma",
+    name = "Average age",
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    )
+  )
 
 ggsave("charts/population-map.png")
   
